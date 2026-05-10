@@ -117,31 +117,13 @@ function addMessage(role, text) {
   return div;
 }
 
-function addBotMessage(text, metadata) {
+function addBotMessage(text) {
   const div = document.createElement("div");
   div.className = "message bot";
 
-  let metaHtml = "";
-  if (metadata) {
-    const tags = [];
-    if (metadata.language)
-      tags.push(
-        `<span class="meta-tag"><span class="label">Lang</span> ${escapeHtml(metadata.language)}</span>`
-      );
-    if (metadata.emotion)
-      tags.push(
-        `<span class="meta-tag"><span class="label">Emotion</span> ${escapeHtml(metadata.emotion)}</span>`
-      );
-    if (metadata.intent)
-      tags.push(
-        `<span class="meta-tag"><span class="label">Intent</span> ${escapeHtml(metadata.intent)}</span>`
-      );
-    if (tags.length) metaHtml = `<div class="meta-tags">${tags.join("")}</div>`;
-  }
-
   div.innerHTML = `
     <div class="avatar">S</div>
-    <div class="bubble">${escapeHtml(text)}${metaHtml}</div>`;
+    <div class="bubble">${escapeHtml(text)}</div>`;
 
   chatArea.appendChild(div);
   chatArea.scrollTop = chatArea.scrollHeight;
@@ -214,27 +196,10 @@ async function send() {
 
     const data = await res.json();
 
-    // Flexible response parsing — adapts to common API shapes:
-    //   { response: "..." }
-    //   { answer: "..." }
-    //   { message: "..." }
-    //   { response: "...", language: "...", emotion: "...", intent: "..." }
     const reply =
       data.response || data.answer || data.message || data.reply || data.text;
 
-    const metadata = {
-      language: data.language || data.detected_language,
-      emotion: data.emotion || data.detected_emotion,
-      intent: data.intent || data.detected_intent,
-    };
-
-    const hasMetadata = metadata.language || metadata.emotion || metadata.intent;
-
-    if (reply) {
-      addBotMessage(reply, hasMetadata ? metadata : null);
-    } else {
-      addBotMessage(JSON.stringify(data, null, 2));
-    }
+    addBotMessage(reply || JSON.stringify(data, null, 2));
   } catch (err) {
     hideTyping();
     if (err.name === "TypeError" && err.message === "Failed to fetch") {
