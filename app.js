@@ -10,7 +10,7 @@ const apiUrlInput = document.getElementById("api-url");
 const apiEndpointInput = document.getElementById("api-endpoint");
 
 const STORAGE_KEY = "serenity_settings";
-const defaults = { apiUrl: "https://surprising-beauty-production-34f3.up.railway.app", endpoint: "/chat" };
+const defaults = { apiUrl: "https://huggingface.co/spaces/Youssef-Hossam5/chatbot", endpoint: "/chat" };
 
 function loadSettings() {
   try {
