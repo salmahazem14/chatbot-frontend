@@ -10,7 +10,12 @@ const apiUrlInput = document.getElementById("api-url");
 const apiEndpointInput = document.getElementById("api-endpoint");
 
 const STORAGE_KEY = "serenity_settings";
-const defaults = { apiUrl: "https://huggingface.co/spaces/Youssef-Hossam5/chatbot", endpoint: "/chat" };
+const SESSION_KEY = "serenity_session";
+
+const defaults = { 
+  apiUrl: "https://youssef-hossam5-chatbot.hf.space",
+  endpoint: "/chat"
+};
 
 function loadSettings() {
   try {
